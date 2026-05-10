@@ -757,32 +757,71 @@ footer{
 
 <!-- ═══════════════════════════════════════════════
      PANEL ADMIN — Edit Harga & Nomor WA
-     Klik tombol ✏️ di pojok kanan bawah halaman
-     Panel ini tidak terlihat oleh pengunjung biasa
+     CARA BUKA: Klik logo ZeQui di navbar 3x
+     Panel ini TIDAK terlihat oleh pengunjung biasa
 ═══════════════════════════════════════════════ -->
 <style>
-#admin-toggle{
-  position:fixed;bottom:24px;right:24px;z-index:9999;
-  width:50px;height:50px;border-radius:50%;
-  background:var(--navy);color:#fff;border:none;cursor:pointer;
-  font-size:18px;box-shadow:0 4px 20px rgba(15,31,92,.4);
-  display:flex;align-items:center;justify-content:center;transition:.2s;
+/* Overlay gelap di belakang popup */
+#admin-overlay{
+  display:none;position:fixed;inset:0;z-index:9990;
+  background:rgba(15,31,92,.45);backdrop-filter:blur(4px);
 }
-#admin-toggle:hover{background:var(--blue);transform:scale(1.08);}
+#admin-overlay.open{display:block;}
+
+/* Popup password */
+#admin-login{
+  display:none;position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);z-index:9995;
+  background:#fff;border-radius:20px;padding:32px 28px;
+  width:300px;box-shadow:0 16px 56px rgba(15,31,92,.25);
+  font-family:var(--font);text-align:center;
+}
+#admin-login.open{display:block;}
+#admin-login h3{
+  font-family:var(--display);font-size:18px;font-weight:700;
+  color:var(--navy);margin-bottom:6px;
+}
+#admin-login p{font-size:13px;color:var(--text3);margin-bottom:20px;}
+#admin-login input{
+  width:100%;padding:11px 14px;border:1.5px solid var(--border);
+  border-radius:12px;font-size:15px;text-align:center;
+  font-family:var(--font);color:var(--navy);outline:none;
+  background:var(--surface2);transition:.2s;letter-spacing:3px;
+  margin-bottom:12px;
+}
+#admin-login input:focus{border-color:var(--blue);background:#fff;}
+#admin-login .ap-save{
+  width:100%;padding:12px;border-radius:50px;
+  background:var(--blue);color:#fff;font-size:14px;font-weight:700;
+  border:none;cursor:pointer;font-family:var(--font);transition:.2s;
+}
+#admin-login .ap-save:hover{background:var(--blue2);}
+#admin-login .err{
+  font-size:12px;color:#ef4444;font-weight:600;
+  margin-top:10px;display:none;
+}
+#admin-login .ap-cancel{
+  font-size:12px;color:var(--text3);margin-top:12px;
+  cursor:pointer;display:block;text-decoration:underline;
+}
+
+/* Panel utama admin */
 #admin-panel{
-  position:fixed;bottom:86px;right:24px;z-index:9998;
+  display:none;position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);z-index:9995;
   background:#fff;border:1.5px solid var(--border);
-  border-radius:20px;padding:26px 22px 20px;
-  box-shadow:0 12px 48px rgba(15,31,92,.2);
-  width:310px;display:none;font-family:var(--font);
+  border-radius:24px;padding:28px 24px 22px;
+  box-shadow:0 16px 56px rgba(15,31,92,.22);
+  width:320px;font-family:var(--font);
+  max-height:90vh;overflow-y:auto;
 }
 #admin-panel.open{display:block;}
 #admin-panel h3{
-  font-family:var(--display);font-size:16px;font-weight:700;
+  font-family:var(--display);font-size:17px;font-weight:700;
   color:var(--navy);margin-bottom:3px;
 }
-#admin-panel .ap-sub{font-size:12px;color:var(--text3);margin-bottom:18px;}
-.ap-field{margin-bottom:12px;}
+#admin-panel .ap-sub{font-size:12px;color:var(--text3);margin-bottom:20px;}
+.ap-field{margin-bottom:13px;}
 .ap-field label{
   display:block;font-size:11px;font-weight:800;letter-spacing:.4px;
   text-transform:uppercase;color:var(--text2);margin-bottom:5px;
@@ -794,12 +833,9 @@ footer{
   background:var(--surface2);transition:.2s;
 }
 .ap-field input:focus{border-color:var(--blue);background:#fff;}
-.ap-divider{
-  border:none;border-top:1.5px solid var(--border2);
-  margin:16px 0;
-}
+.ap-divider{border:none;border-top:1.5px solid var(--border2);margin:16px 0;}
 .ap-save{
-  width:100%;padding:11px;border-radius:50px;
+  width:100%;padding:12px;border-radius:50px;
   background:var(--blue);color:#fff;font-size:14px;font-weight:700;
   border:none;cursor:pointer;font-family:var(--font);transition:.2s;margin-top:4px;
 }
@@ -808,20 +844,53 @@ footer{
   text-align:center;font-size:12px;color:var(--green);
   font-weight:700;margin-top:10px;display:none;
 }
+.ap-close{
+  font-size:12px;color:var(--text3);text-align:center;
+  margin-top:14px;cursor:pointer;text-decoration:underline;display:block;
+}
 .ap-hint{
   font-size:11px;color:var(--text3);text-align:center;
   margin-top:12px;padding-top:12px;border-top:1px solid var(--border2);
   line-height:1.6;
 }
+
+/* Indikator klik logo (titik kecil muncul tiap klik) */
+#logo-click-hint{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:9980;pointer-events:none;
+}
+.lch-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--blue);opacity:0;
+  transition:opacity .2s;
+}
+.lch-dot.active{opacity:1;}
 </style>
 
-<!-- Tombol buka panel -->
-<button id="admin-toggle" title="Edit Harga & WA">✏️</button>
+<!-- Indikator klik logo -->
+<div id="logo-click-hint">
+  <div class="lch-dot" id="d1"></div>
+  <div class="lch-dot" id="d2"></div>
+  <div class="lch-dot" id="d3"></div>
+</div>
 
-<!-- Panel admin -->
+<!-- Overlay -->
+<div id="admin-overlay"></div>
+
+<!-- Popup password -->
+<div id="admin-login">
+  <h3>🔐 Admin ZeQui</h3>
+  <p>Masukkan password untuk melanjutkan</p>
+  <input type="password" id="inp-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')cekPassword()">
+  <button class="ap-save" onclick="cekPassword()">Masuk</button>
+  <div class="err" id="login-err">❌ Password salah, coba lagi.</div>
+  <span class="ap-cancel" onclick="tutupAdmin()">Batal</span>
+</div>
+
+<!-- Panel utama -->
 <div id="admin-panel">
   <h3>⚙️ Panel Admin</h3>
-  <div class="ap-sub">Edit harga & nomor WA — lalu klik Simpan</div>
+  <div class="ap-sub">Edit harga &amp; nomor WA — klik Simpan setelah selesai</div>
 
   <div class="ap-field">
     <label>💰 Harga Paket Starter</label>
@@ -844,18 +913,20 @@ footer{
   </div>
 
   <button class="ap-save" onclick="simpanAdmin()">💾 Simpan Perubahan</button>
-  <div class="ap-ok" id="ap-ok">✅ Tersimpan!</div>
+  <div class="ap-ok" id="ap-ok">✅ Tersimpan! Perubahan tampil di halaman.</div>
 
   <div class="ap-hint">
-    ⚠️ Setelah simpan, salin nilai baru ke file HTML<br>agar permanen setelah halaman di-refresh.
+    ⚠️ Refresh halaman = perubahan hilang.<br>
+    Untuk permanen, update juga di file HTML-nya.
   </div>
+  <span class="ap-close" onclick="tutupAdmin()">✕ Tutup panel</span>
 </div>
 
 <script>
-/* ── Intersection observer untuk animasi reveal ── */
+/* ── Animasi reveal ── */
 const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    if (e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
@@ -865,42 +936,89 @@ window.addEventListener('scroll', () => {
     window.scrollY > 30 ? '0 4px 24px rgba(15,31,92,.1)' : 'none';
 });
 
-/* ── Panel Admin ── */
-const panel = document.getElementById('admin-panel');
+/* ── Admin: klik logo 3x ── */
+// GANTI INI DENGAN PASSWORD ANDA:
+const ADMIN_PASSWORD = 'ZeQui2026';
 
-document.getElementById('admin-toggle').addEventListener('click', () => {
-  panel.classList.toggle('open');
-  // Isi input dengan nilai yang sedang tampil
+let logoKlik = 0;
+let logoTimer = null;
+const dots = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
+
+document.querySelector('.nav-brand').addEventListener('click', function(e){
+  e.preventDefault();
+  logoKlik++;
+  if(logoKlik <= 3) dots[logoKlik-1].classList.add('active');
+
+  clearTimeout(logoTimer);
+  logoTimer = setTimeout(() => {
+    logoKlik = 0;
+    dots.forEach(d => d.classList.remove('active'));
+  }, 1500);
+
+  if(logoKlik === 3){
+    logoKlik = 0;
+    dots.forEach(d => d.classList.remove('active'));
+    bukaLogin();
+  }
+});
+
+function bukaLogin(){
+  document.getElementById('admin-overlay').classList.add('open');
+  document.getElementById('admin-login').classList.add('open');
+  document.getElementById('inp-pass').value = '';
+  document.getElementById('login-err').style.display = 'none';
+  setTimeout(() => document.getElementById('inp-pass').focus(), 100);
+}
+
+function cekPassword(){
+  const val = document.getElementById('inp-pass').value;
+  if(val === ADMIN_PASSWORD){
+    document.getElementById('admin-login').classList.remove('open');
+    bukaPanel();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('inp-pass').value = '';
+    document.getElementById('inp-pass').focus();
+  }
+}
+
+function bukaPanel(){
+  document.getElementById('admin-panel').classList.add('open');
+  // Isi input dengan nilai saat ini
   document.getElementById('inp-starter').value    = document.getElementById('harga-starter').textContent;
   document.getElementById('inp-pro').value        = document.getElementById('harga-pro').textContent;
   document.getElementById('inp-enterprise').value = document.getElementById('harga-enterprise').textContent;
-  // Isi nomor WA dari link yang ada
-  const waLink = document.querySelector('.wa-btn');
-  const waMatch = waLink ? waLink.href.match(/wa\.me\/(\d+)/) : null;
+  const waMatch = document.querySelector('.wa-btn')?.href.match(/wa\.me\/(\d+)/);
   document.getElementById('inp-wa').value = waMatch ? waMatch[1] : '';
-});
+}
 
-function simpanAdmin() {
+function tutupAdmin(){
+  document.getElementById('admin-overlay').classList.remove('open');
+  document.getElementById('admin-login').classList.remove('open');
+  document.getElementById('admin-panel').classList.remove('open');
+}
+
+document.getElementById('admin-overlay').addEventListener('click', tutupAdmin);
+
+function simpanAdmin(){
   const starter    = document.getElementById('inp-starter').value.trim();
   const pro        = document.getElementById('inp-pro').value.trim();
   const enterprise = document.getElementById('inp-enterprise').value.trim();
   const wa         = document.getElementById('inp-wa').value.trim().replace(/\D/g,'');
 
-  if (starter)    document.getElementById('harga-starter').textContent    = starter;
-  if (pro)        document.getElementById('harga-pro').textContent        = pro;
-  if (enterprise) document.getElementById('harga-enterprise').textContent = enterprise;
+  if(starter)    document.getElementById('harga-starter').textContent    = starter;
+  if(pro)        document.getElementById('harga-pro').textContent        = pro;
+  if(enterprise) document.getElementById('harga-enterprise').textContent = enterprise;
 
-  // Update semua tombol WA di halaman
-  if (wa) {
+  if(wa){
     document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
       a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + wa);
     });
   }
 
-  // Tampilkan konfirmasi
   const ok = document.getElementById('ap-ok');
   ok.style.display = 'block';
-  setTimeout(() => { ok.style.display = 'none'; }, 2500);
+  setTimeout(() => { ok.style.display = 'none'; }, 3000);
 }
 </script>
 </body>
