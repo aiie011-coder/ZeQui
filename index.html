@@ -628,7 +628,7 @@ footer{
       <div class="price-card">
         <div class="price-name">Starter</div>
         <div class="price-desc">Usaha kecil & mandiri</div>
-        <div class="price-amount"><span class="num">Terjangkau</span></div>
+        <div class="price-amount"><span class="num" id="harga-starter">Terjangkau</span></div>
         <div class="price-trial">💬 Hubungi kami</div>
         <ul class="price-features">
           <li><span class="ck">✓</span> 3 Perusahaan</li>
@@ -647,7 +647,7 @@ footer{
         <div class="popular-badge">⭐ Paling Populer</div>
         <div class="price-name">Pro</div>
         <div class="price-desc">Bisnis yang berkembang</div>
-        <div class="price-amount"><span class="num">Terjangkau</span></div>
+        <div class="price-amount"><span class="num" id="harga-pro">Terjangkau</span></div>
         <div class="price-trial">💬 Hubungi kami</div>
         <ul class="price-features">
           <li><span class="ck">✓</span> 10 Perusahaan</li>
@@ -665,7 +665,7 @@ footer{
       <div class="price-card">
         <div class="price-name">Enterprise</div>
         <div class="price-desc">Entitas besar & kompleks</div>
-        <div class="price-amount"><span class="num">Terjangkau</span></div>
+        <div class="price-amount"><span class="num" id="harga-enterprise">Terjangkau</span></div>
         <div class="price-trial">💬 Hubungi kami</div>
         <ul class="price-features">
           <li><span class="ck">✓</span> Unlimited Perusahaan</li>
@@ -755,17 +755,153 @@ footer{
   </div>
 </footer>
 
+<!-- ═══════════════════════════════════════════════
+     PANEL ADMIN — Edit Harga & Nomor WA
+     Klik tombol ✏️ di pojok kanan bawah halaman
+     Panel ini tidak terlihat oleh pengunjung biasa
+═══════════════════════════════════════════════ -->
+<style>
+#admin-toggle{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  width:50px;height:50px;border-radius:50%;
+  background:var(--navy);color:#fff;border:none;cursor:pointer;
+  font-size:18px;box-shadow:0 4px 20px rgba(15,31,92,.4);
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+#admin-toggle:hover{background:var(--blue);transform:scale(1.08);}
+#admin-panel{
+  position:fixed;bottom:86px;right:24px;z-index:9998;
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:20px;padding:26px 22px 20px;
+  box-shadow:0 12px 48px rgba(15,31,92,.2);
+  width:310px;display:none;font-family:var(--font);
+}
+#admin-panel.open{display:block;}
+#admin-panel h3{
+  font-family:var(--display);font-size:16px;font-weight:700;
+  color:var(--navy);margin-bottom:3px;
+}
+#admin-panel .ap-sub{font-size:12px;color:var(--text3);margin-bottom:18px;}
+.ap-field{margin-bottom:12px;}
+.ap-field label{
+  display:block;font-size:11px;font-weight:800;letter-spacing:.4px;
+  text-transform:uppercase;color:var(--text2);margin-bottom:5px;
+}
+.ap-field input{
+  width:100%;padding:9px 13px;border:1.5px solid var(--border);
+  border-radius:10px;font-size:14px;font-weight:600;
+  color:var(--navy);font-family:var(--font);outline:none;
+  background:var(--surface2);transition:.2s;
+}
+.ap-field input:focus{border-color:var(--blue);background:#fff;}
+.ap-divider{
+  border:none;border-top:1.5px solid var(--border2);
+  margin:16px 0;
+}
+.ap-save{
+  width:100%;padding:11px;border-radius:50px;
+  background:var(--blue);color:#fff;font-size:14px;font-weight:700;
+  border:none;cursor:pointer;font-family:var(--font);transition:.2s;margin-top:4px;
+}
+.ap-save:hover{background:var(--blue2);}
+.ap-ok{
+  text-align:center;font-size:12px;color:var(--green);
+  font-weight:700;margin-top:10px;display:none;
+}
+.ap-hint{
+  font-size:11px;color:var(--text3);text-align:center;
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--border2);
+  line-height:1.6;
+}
+</style>
+
+<!-- Tombol buka panel -->
+<button id="admin-toggle" title="Edit Harga & WA">✏️</button>
+
+<!-- Panel admin -->
+<div id="admin-panel">
+  <h3>⚙️ Panel Admin</h3>
+  <div class="ap-sub">Edit harga & nomor WA — lalu klik Simpan</div>
+
+  <div class="ap-field">
+    <label>💰 Harga Paket Starter</label>
+    <input type="text" id="inp-starter" placeholder="contoh: Rp 299.000 / tahun">
+  </div>
+  <div class="ap-field">
+    <label>💰 Harga Paket Pro</label>
+    <input type="text" id="inp-pro" placeholder="contoh: Rp 499.000 / tahun">
+  </div>
+  <div class="ap-field">
+    <label>💰 Harga Paket Enterprise</label>
+    <input type="text" id="inp-enterprise" placeholder="contoh: Rp 899.000 / tahun">
+  </div>
+
+  <hr class="ap-divider">
+
+  <div class="ap-field">
+    <label>📱 Nomor WhatsApp</label>
+    <input type="text" id="inp-wa" placeholder="contoh: 6281234567890">
+  </div>
+
+  <button class="ap-save" onclick="simpanAdmin()">💾 Simpan Perubahan</button>
+  <div class="ap-ok" id="ap-ok">✅ Tersimpan!</div>
+
+  <div class="ap-hint">
+    ⚠️ Setelah simpan, salin nilai baru ke file HTML<br>agar permanen setelah halaman di-refresh.
+  </div>
+</div>
+
 <script>
+/* ── Intersection observer untuk animasi reveal ── */
 const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').style.boxShadow =
     window.scrollY > 30 ? '0 4px 24px rgba(15,31,92,.1)' : 'none';
 });
+
+/* ── Panel Admin ── */
+const panel = document.getElementById('admin-panel');
+
+document.getElementById('admin-toggle').addEventListener('click', () => {
+  panel.classList.toggle('open');
+  // Isi input dengan nilai yang sedang tampil
+  document.getElementById('inp-starter').value    = document.getElementById('harga-starter').textContent;
+  document.getElementById('inp-pro').value        = document.getElementById('harga-pro').textContent;
+  document.getElementById('inp-enterprise').value = document.getElementById('harga-enterprise').textContent;
+  // Isi nomor WA dari link yang ada
+  const waLink = document.querySelector('.wa-btn');
+  const waMatch = waLink ? waLink.href.match(/wa\.me\/(\d+)/) : null;
+  document.getElementById('inp-wa').value = waMatch ? waMatch[1] : '';
+});
+
+function simpanAdmin() {
+  const starter    = document.getElementById('inp-starter').value.trim();
+  const pro        = document.getElementById('inp-pro').value.trim();
+  const enterprise = document.getElementById('inp-enterprise').value.trim();
+  const wa         = document.getElementById('inp-wa').value.trim().replace(/\D/g,'');
+
+  if (starter)    document.getElementById('harga-starter').textContent    = starter;
+  if (pro)        document.getElementById('harga-pro').textContent        = pro;
+  if (enterprise) document.getElementById('harga-enterprise').textContent = enterprise;
+
+  // Update semua tombol WA di halaman
+  if (wa) {
+    document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+      a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + wa);
+    });
+  }
+
+  // Tampilkan konfirmasi
+  const ok = document.getElementById('ap-ok');
+  ok.style.display = 'block';
+  setTimeout(() => { ok.style.display = 'none'; }, 2500);
+}
 </script>
 </body>
 </html>
