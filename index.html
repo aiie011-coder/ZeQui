@@ -69,9 +69,15 @@ nav{
 }
 .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .nav-logo{width:36px;height:36px;object-fit:contain;}
+.nav-brand-text{display:flex;flex-direction:column;line-height:1.1;}
 .nav-name{
   font-family:var(--display);font-size:20px;font-weight:700;
   color:var(--navy);letter-spacing:-.3px;
+}
+.nav-subtitle{
+  font-size:9px;font-weight:600;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--text3);
+  white-space:nowrap;
 }
 .nav-links{display:flex;align-items:center;gap:28px;}
 .nav-links a{
@@ -309,7 +315,7 @@ section{position:relative;z-index:1;padding:88px 56px;}
 }
 .price-btn.outline:hover{border-color:var(--blue);color:var(--blue);background:var(--accent);}
 .price-btn.solid{
-  background:#fff;color:var(--navy);
+  background:#fff;color:var(--navy) !important;
   box-shadow:0 4px 14px rgba(255,255,255,.2);
 }
 .price-btn.solid:hover{background:rgba(255,255,255,.9);transform:translateY(-1px);}
@@ -431,7 +437,10 @@ footer{
 <nav id="navbar">
   <a class="nav-brand" href="#">
     <img class="nav-logo" src="./logo.png" alt="ZeQui">
-    <span class="nav-name">ZeQui</span>
+    <div class="nav-brand-text">
+      <span class="nav-name">ZeQui</span>
+      <span class="nav-subtitle">Zenith Quality Accounting System</span>
+    </div>
   </a>
   <div class="nav-links">
     <a href="#features">Fitur</a>
@@ -567,6 +576,30 @@ footer{
 </section>
 
 <!-- PRICING -->
+<!--
+=======================================================
+  📌 TUTORIAL MENGEDIT HARGA
+=======================================================
+  Untuk mengubah harga, cari tulisan seperti ini:
+  
+  <span class="num">Terjangkau</span>
+  
+  Ganti kata "Terjangkau" dengan harga Anda, misalnya:
+  <span class="num">Rp 299.000</span>
+  
+  Ada 4 paket: Trial, Starter, Pro, Enterprise
+  Masing-masing punya bagian <span class="num">...</span>
+  
+  Untuk teks di bawah harga (misal "per tahun"):
+  Tambahkan: <span class="per">/ tahun</span>
+  
+  Contoh lengkap:
+  <div class="price-amount">
+    <span class="num">Rp 299.000</span>
+    <span class="per">/ tahun</span>
+  </div>
+=======================================================
+-->
 <section id="pricing">
   <div class="pricing-wrap center">
     <div class="section-label reveal">Harga</div>
